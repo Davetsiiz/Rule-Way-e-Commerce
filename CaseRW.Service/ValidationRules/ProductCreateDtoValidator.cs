@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace CaseRW.Service.ValidationRules
 {
-    public class ProductCreateDtoValidator : AbstractValidator<ProductDto>
+    public class ProductCreateDtoValidator : AbstractValidator<ProductCreateDto>
     {
         public ProductCreateDtoValidator()
         {

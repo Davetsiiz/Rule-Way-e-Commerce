@@ -2,7 +2,6 @@
 using CaseRW.Api.Filters;
 using CaseRW.Core.DTOs;
 using CaseRW.Core.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CaseRW.Api.Controllers
@@ -24,11 +23,13 @@ namespace CaseRW.Api.Controllers
         {
             return CreateActionResult(await _categoryService.GetCategoryByIdWithProductsAsync(categoryId));
         }
+
         [HttpGet("[action]/{categoryName}")]
         public async Task<IActionResult> GetCategoryBySearch(string categoryName)
         {
             return CreateActionResult(await _categoryService.GetCategoryBySearchAsync(categoryName));
         }
+
         [HttpGet]
         public async Task<IActionResult> All()
         {

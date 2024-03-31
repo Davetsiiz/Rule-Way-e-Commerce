@@ -6,6 +6,9 @@ using CaseRW.Repository.Repositories;
 using CaseRW.Repository.UnitOfWorks;
 using CaseRW.Service.Mapping;
 using CaseRW.Service.Services;
+using CaseRW.Service.ValidationRules;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -13,15 +16,14 @@ using System.Reflection;
 
 
 var builder = WebApplication.CreateBuilder(args);
-//builder.Services.AddControllers().AddFluentValidationAutoValidation(x => x.RegisterValidatorsFromAssemblyContaining<ProductDtoValidator>());
-//builder.Services.AddControllers().AddFluentValidationAutoValidation();
-//builder.Services.AddControllers().AddFluentValidationClientsideAdapters();
-//builder.Services.AddControllers().AddValidatorsFromAssemblyContaining<ProductDtoValidator>();
-//Fluent validationu inaktif hale getiririz
-//builder.Services.Configure<ApiBehaviorOptions>(opt =>
-//{
-//    opt.SuppressModelStateInvalidFilter = true;
-//});
+builder.Services.AddControllers().AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<ProductDtoValidator>());
+builder.Services.AddControllers().AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<ProductCreateDtoValidator>());
+builder.Services.AddControllers().AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<ProductUpdateDtoValidator>());
+//Fluentvalidation'ý inaktif hale getiririz
+builder.Services.Configure<ApiBehaviorOptions>(opt =>
+{
+    opt.SuppressModelStateInvalidFilter = true;
+});
 
 
 
@@ -59,7 +61,8 @@ builder.Services.AddSwaggerGen();
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+
+builder.Services.AddMvc();
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
@@ -72,7 +75,6 @@ if (app.Environment.IsDevelopment())
 // Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
 app.MapControllers();

@@ -3,7 +3,6 @@ using CaseRW.Api.Filters;
 using CaseRW.Core.DTOs;
 using CaseRW.Core.Entities;
 using CaseRW.Core.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CaseRW.Api.Controllers
@@ -21,17 +20,15 @@ namespace CaseRW.Api.Controllers
         }
 
 
-        //GET api/products
+
         [HttpGet]
         public async Task<IActionResult> All()
         {
             var products = await _productService.GetAllAsync();
             var productsDtos = _mapper.Map<List<ProductDto>>(products.ToList());
-            //BaseController koymazsak kullanılabilir
-            //return Ok(CustomResponseDto<List<ProductDto>>.Success(200, productsDtos));
             return CreateActionResult(CustomResponseDto<List<ProductDto>>.Success(200, productsDtos));
         }
-        //GET /api/products/5
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -45,16 +42,16 @@ namespace CaseRW.Api.Controllers
             var product = await _productService.AddAsync(_mapper.Map<Product>(productCreateDto));
             var productDtos = _mapper.Map<ProductCreateDto>(product);
             return CreateActionResult(CustomResponseDto<ProductCreateDto>.Success(201, productDtos));
-            //201 Created
+
         }
         [HttpPut]
         public async Task<IActionResult> Update(ProductUpdateDto productUpdateDto)
         {
             await _productService.UpdateAsync(_mapper.Map<Product>(productUpdateDto));
             return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204));
-            //204 no content
+
         }
-        //DELETE api/product/5
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Remove(int id)
         {
@@ -67,7 +64,6 @@ namespace CaseRW.Api.Controllers
             return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204));
         }
 
-        //GET api/products/GetProductWithCategory
         [HttpGet("[action]")]
         public async Task<IActionResult> GetProductWithCategory()
         {
@@ -79,14 +75,15 @@ namespace CaseRW.Api.Controllers
         {
             return CreateActionResult(await _productService.GetProductTitleBySearchAsync(title));
         }
+
         [HttpGet("[action]/{description}")]
         public async Task<IActionResult> GetProductDescriptionBySearch(string description)
         {
             return CreateActionResult(await _productService.GetProductDescriptionBySearchAsync(description));
         }
 
-        [HttpGet("[action]/{max}/{min}")]
-        public async Task<IActionResult> GetProductDescriptionBySearch(int max, int min)
+        [HttpGet("[action]/{min}/{max}")]
+        public async Task<IActionResult> GetProductByStockQuantityRange(int min, int max)
         {
             return CreateActionResult(await _productService.GetProductsByStockQuantityRangeAsync(max, min));
         }
